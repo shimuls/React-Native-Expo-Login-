@@ -1,30 +1,13 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
 import { Component, useState } from 'react';
-import { Image,Button, Platform, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
+import { FlatList,ActivityIndicator, Image,Button, Platform, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 import { ScrollView, State } from 'react-native-gesture-handler';
 
 import { MonoText } from '../components/StyledText';
+import { isLoading } from 'expo-font';
 
-/* function Cat(props) {
-  const [isHungry, setIsHungry] = useState(true);
 
-  return (
-    <View>
-      <Text>
-        Serching for Invoice No - {props.name}
-      </Text>
-      <Button
-        onPress={() => {
-          setIsHungry(false);
-        }}
-        disabled={!isHungry}
-        title={isHungry ? "Pour me some milk, please!" : "Thank you!"}
-      />
-    </View>
-  );
-}
- */
 
 export default function HomeScreen() {
   return (
@@ -47,18 +30,10 @@ export default function HomeScreen() {
 
           
           <InvoiceByNumber />
-          <DevelopmentModeNotice />
 
 
-          <Text style={styles.getStartedText}>Open up the code for this screen:</Text>
+          
 
-          <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
-
-          <Text style={styles.getStartedText}>
-            Change any of the text, save the file, and your app will automatically reload.
-          </Text>
         </View>
 
         <View style={styles.helpContainer}>
@@ -79,22 +54,153 @@ export default function HomeScreen() {
   );
 }
 
-function _onPressButton(v) {
-  alert(v)
-};
+
+
+
+
+
+
+export  class FetchExample extends React.Component {
+  constructor(props) {
+    super(props);
+    
+    this.state = { isLoading: true };
+  }
+
+  componentDidMount() {
+    return fetch('https://reactnative.dev/movies.json')
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState(
+          {
+            isLoading: false,
+            dataSource: responseJson.movies,
+          },
+          function() {}
+        );
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  render() {
+    if (this.state.isLoading) {
+      return (
+        <View style={{ flex: 1, padding: 20 }}>
+          <ActivityIndicator />
+        </View>
+      );
+    }
+
+    return (
+      <View style={{ flex: 1, paddingTop: 20 }}>
+        <view>
+        <text>{this.props.mytext}</text>
+        </view>
+
+        <FlatList
+          data={this.state.dataSource}
+          renderItem={({ item }) => (
+            <Text>
+              {item.title}, {item.releaseYear}
+            </Text>
+          )}
+          keyExtractor={({ id }, index) => id}
+        />
+      </View>
+    );
+  }
+}
 
 
 export  class InvoiceByNumber extends React.Component {
-  state = { inv_no: '' }
+  constructor(props) {
+    super(props);
+    this.state = { isLoading: true };
+  }
+
+  state={
+    isVisible:true
+  }
+  componentDidMount() {
+    const myText ="some text"
+    return fetch('https://reactnative.dev/movies.json')
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState(
+          {
+            isLoading: true,
+            canSearch: false,
+            dataSource: responseJson.movies,
+          },
+          function() {}
+        );
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+
+
+  renderResults=() =>{ 
+    this.setState({
+      isVisible:!this.state.isVisible//toggles the visibilty of the text
+    })
+  } 
+
+
 
   onChangeText = (key, val) => {
     this.setState({ [key]: val})
   }
-  
+
+    
   render() { 
+
+    let Block;
+    let Search;
+
+    Search = <div>
+
+          <TextInput
+            placeholder='Invoice Number'
+            onChangeText={val => this.onChangeText('inv_no', val)}
+            style={styles.input}
+          />
+          <Button onPress={ this.renderResults} 
+                title="Search!" 
+                color="#841584" /> 
+           {this.state.isVisible?<Text> 
+             <FetchExample 
+             mytext={this.state.inv_no}
+             /> 
+          </Text>:null}
+
+    </div>;
+  
+
     return (
+      <view>
+
+        {Block}
+        {Search}
+
+    </view>
+      
+      
+
+      
+    );
+
+   /*  return (
       <View style={styles.container}>
-          <Text>SERARCH</Text>
+         
+         <Button onPress={ this.renderResults} 
+            title="Search!" 
+            color="#841584" /> 
+          <Text>Service</Text>
           <TextInput
             placeholder='Invoice Number '
             onChangeText={val => this.onChangeText('inv_no', val)}
@@ -107,8 +213,13 @@ export  class InvoiceByNumber extends React.Component {
           >
             
           </Button>
-      </View>
-    );
+          <view >
+          {this.state.isVisible?<Text> get printed </Text>:null}
+          </view>
+         
+      
+        </View>
+    ); */
   }
 }
 

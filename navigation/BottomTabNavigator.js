@@ -4,8 +4,9 @@ import * as React from 'react';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
-import LoginScreen from '../screens/LoingScreen'
-import SearchInvoice from '../screens/SearchInvoice'
+import LoginScreen from '../screens/LoingScreen';
+import SearchInvoice from '../screens/SearchInvoice';
+import InvoiceFetch from '../screens/InvoiceFetch';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Login';
