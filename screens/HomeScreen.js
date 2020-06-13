@@ -1,9 +1,30 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Component, useState } from 'react';
+import { Image,Button, Platform, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
+import { ScrollView, State } from 'react-native-gesture-handler';
 
 import { MonoText } from '../components/StyledText';
+
+/* function Cat(props) {
+  const [isHungry, setIsHungry] = useState(true);
+
+  return (
+    <View>
+      <Text>
+        Serching for Invoice No - {props.name}
+      </Text>
+      <Button
+        onPress={() => {
+          setIsHungry(false);
+        }}
+        disabled={!isHungry}
+        title={isHungry ? "Pour me some milk, please!" : "Thank you!"}
+      />
+    </View>
+  );
+}
+ */
 
 export default function HomeScreen() {
   return (
@@ -21,7 +42,13 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.getStartedContainer}>
+
+
+
+          
+          <InvoiceByNumber />
           <DevelopmentModeNotice />
+
 
           <Text style={styles.getStartedText}>Open up the code for this screen:</Text>
 
@@ -51,6 +78,79 @@ export default function HomeScreen() {
     </View>
   );
 }
+
+function _onPressButton(v) {
+  alert(v)
+};
+
+
+export  class InvoiceByNumber extends React.Component {
+  state = { inv_no: '' }
+
+  onChangeText = (key, val) => {
+    this.setState({ [key]: val})
+  }
+  
+  render() { 
+    return (
+      <View style={styles.container}>
+          <Text>SERARCH</Text>
+          <TextInput
+            placeholder='Invoice Number '
+            onChangeText={val => this.onChangeText('inv_no', val)}
+            style={styles.input}
+          />
+
+          <Button
+            onPress={()=>alert( this.state.inv_no)}
+            title="Search"
+          >
+            
+          </Button>
+      </View>
+    );
+  }
+}
+
+/* export  class InvoiceByNumber extends React.Component {
+    signIn = () => {
+      var username = this.refs.username.value;
+      var password = this.refs.password.value;
+  
+      Alert.alert(username); //doesn't work
+      Alert.alert(password); //doesn't work
+    }
+    render() {
+      return (
+        <View style={{marginTop: 60}}>
+          <TextInput ref='username' placeholder='Username' autoCapitalize='none' />
+          <TextInput ref='password' placeholder='Password' autoCapitalize='none' secureTextEntry={true} />
+          <Button title='Submit' onPress={this.signIn.bind(this)} />
+        </View>
+      );
+    }
+  } */
+
+
+
+export function PizzaTranslator() {
+  const [text, setText] = useState('');
+  return (
+    <View style={{padding: 10}}>
+      <TextInput
+        style={{height: 40}}  
+        placeholder="Type here to translate!"
+        onChangeText={text => setText(text)}
+        defaultValue={text}
+      />
+      <Text style={{padding: 10, fontSize: 42}}>
+        {text.split(' ').map((word) => word && '🍕').join(' ')}
+      </Text>
+    </View>
+  );
+}
+
+
 
 HomeScreen.navigationOptions = {
   header: null,
@@ -90,6 +190,8 @@ function handleHelpPress() {
 }
 
 const styles = StyleSheet.create({
+
+
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -175,5 +277,13 @@ const styles = StyleSheet.create({
   helpLinkText: {
     fontSize: 14,
     color: '#2e78b7',
+  },
+  buttonContainer: {
+    margin: 20
+  },
+  alternativeLayoutButtonContainer: {
+    margin: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
 });
