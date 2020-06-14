@@ -85,7 +85,7 @@ export default class LoginScreen extends React.Component {
     //const access_token =""
     
     this.setState({loading:true,message:"", access_token:""})
-    axios.post(`http://127.0.0.1:8000/api/auth/login`,{"username":"admin@admin.com","password":"admin123"})
+    axios.post(`http://192.168.1.10:8000/api/auth/login`,{"username":"admin@admin.com","password":"admin123"})
     .then(async res=>{
         global.acc_key[0] = res.data.access_token
        

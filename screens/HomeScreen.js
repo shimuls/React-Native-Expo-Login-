@@ -7,8 +7,6 @@ import { ScrollView, State } from 'react-native-gesture-handler';
 import { MonoText } from '../components/StyledText';
 import { isLoading } from 'expo-font';
 
-
-
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
@@ -25,29 +23,22 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.getStartedContainer}>
-
-
-
           
           <InvoiceByNumber />
-
-
-          
-
         </View>
 
         <View style={styles.helpContainer}>
           <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
+            <Text style={styles.helpLinkText}>Help</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
 
       <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
+      
 
         <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
+          <MonoText style={styles.codeHighlightText}></MonoText>
         </View>
       </View>
     </View>
@@ -68,13 +59,25 @@ export  class FetchExample extends React.Component {
   }
 
   componentDidMount() {
-    return fetch('https://reactnative.dev/movies.json')
+    var myHeaders = new Headers();
+      myHeaders.append("Authorization", "Bearer "+global.acc_key[0]);
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      //fetch("127.0.0.1:8000/api/invoices/1", requestOptions)
+
+      //fetch('https://reactnative.dev/movies.json')
+    return fetch("http://192.168.1.10:8000/api/invoices/"+this.props.mytext, requestOptions)
       .then(response => response.json())
       .then(responseJson => {
         this.setState(
           {
             isLoading: false,
-            dataSource: responseJson.movies,
+            dataSource: responseJson.invoice,
           },
           function() {}
         );
@@ -95,19 +98,12 @@ export  class FetchExample extends React.Component {
 
     return (
       <View style={{ flex: 1, paddingTop: 20 }}>
-        <view>
-        <text>{this.props.mytext}</text>
-        </view>
+                       
+         <Text style={styles.developmentModeText}> Number: {this.state.dataSource.invoice_number}</Text> 
+         <Text style={styles.developmentModeText}> Date: {this.state.dataSource.due_date} </Text> 
+         <Text style={styles.developmentModeText}> Category: {this.state.dataSource.items[0].name} </Text> 
+         <Text style={styles.developmentModeText}> Total: {this.state.dataSource.items[0].total} </Text> 
 
-        <FlatList
-          data={this.state.dataSource}
-          renderItem={({ item }) => (
-            <Text>
-              {item.title}, {item.releaseYear}
-            </Text>
-          )}
-          keyExtractor={({ id }, index) => id}
-        />
       </View>
     );
   }
@@ -124,22 +120,7 @@ export  class InvoiceByNumber extends React.Component {
     isVisible:true
   }
   componentDidMount() {
-    const myText ="some text"
-    return fetch('https://reactnative.dev/movies.json')
-      .then(response => response.json())
-      .then(responseJson => {
-        this.setState(
-          {
-            isLoading: true,
-            canSearch: false,
-            dataSource: responseJson.movies,
-          },
-          function() {}
-        );
-      })
-      .catch(error => {
-        console.error(error);
-      });
+
   }
 
 
@@ -162,32 +143,33 @@ export  class InvoiceByNumber extends React.Component {
     let Block;
     let Search;
 
-    Search = <div>
-
+    Search = <View>
+      
+  
           <TextInput
-            placeholder='Invoice Number'
+            placeholder='Check Ticket'
             onChangeText={val => this.onChangeText('inv_no', val)}
             style={styles.input}
           />
           <Button onPress={ this.renderResults} 
                 title="Search!" 
                 color="#841584" /> 
-           {this.state.isVisible?<Text> 
+           {this.state.isVisible?<View style={styles.developmentModeText}> 
              <FetchExample 
              mytext={this.state.inv_no}
              /> 
-          </Text>:null}
+          </View>:null}
 
-    </div>;
+    </View>;
   
 
     return (
-      <view>
+      <View>
 
         {Block}
         {Search}
 
-    </view>
+    </View>
       
       
 
@@ -213,9 +195,9 @@ export  class InvoiceByNumber extends React.Component {
           >
             
           </Button>
-          <view >
+          <View >
           {this.state.isVisible?<Text> get printed </Text>:null}
-          </view>
+          </View>
          
       
         </View>

@@ -5,8 +5,8 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import LoginScreen from '../screens/LoingScreen';
-import SearchInvoice from '../screens/SearchInvoice';
-import InvoiceFetch from '../screens/InvoiceFetch';
+
+
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Login';
@@ -30,14 +30,14 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
       />
-      <BottomTab.Screen
+{/*       <BottomTab.Screen
         name="SearchInvoice"
         component={SearchInvoice}
         options={{
           title: 'Search Invoice',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
-      />
+      /> */}
       <BottomTab.Screen
         name="Links"
         component={LinksScreen}
